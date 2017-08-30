@@ -1,0 +1,527 @@
+Kicad StepUp starter Guide
+==========================
+:Author:    Maurice
+:Email:     https://launchpad.net/~easyw
+:Author Initials: MEW
+:Date:      05 Jan 2017
+:Revision:  2.1.0
+:website: http://sourceforge.net/projects/kicadstepup/
+:docname: kicadStepUp-starter-Guide.adoc
+
+<<<
+
+Basic Info
+----------
+
+*kicad StepUp 3D mechanical exporter* for collaborative exchange between KiCad and FreeCAD/MCAD;
+With *kicad StepUp*, it is possible to work in kicad EDA with the same component model data
+available in the *STEP AP214 3D format*, and obtain a 3D STEP AP214 model of the pcb board and
+a complete board assemblies with electronic modules, to be used for *MCAD interchange*.
+The accurate 3D visualization of components on board assemblies in kicad 3dviewer, is
+maintained in the same accuracy and aspect in STEP AP214 format. +
+The *kicad StepUp* maintains the usual way to work with kicad, but improves the process
+to work in a collaborative way with mechanical designers bringing near ECAD and MCAD environments. +
+
+*New!!!* now kicad StepUp comes in 3 flavours: +
+1. running as a *script* +
+2. running as a *GUI* +
+3. running as a *Mod* native FreeCAD *WorkBench* +
+
+link:http://sourceforge.net/projects/kicadstepup/[kicadStepUp at sourceforge] +
+link:https://youtu.be/h6wMU3lE_sA[YouTube Kicad StepUp New Tutorial video] +
+link:http://youtu.be/Ukd47VXYzQU[YouTube Kicad StepUp old script video] +
+
+requirements
+------------
+link:http://kicad-pcb.org/[KiCad EDA] version 4.00 or later +
+link:http://freecadweb.org/[FreeCAD] version 0.15 or later
+
+<<< 
+Quick Facts
+-----------
+**********************************************************************
+*kicad StepUp tools are for*: +
+1. export kicad board and parts to STEP (or IGES) for a full ECAD MCAD integration (no need of VRML if using kicad 5 or dev) +
+2. convert your STEP model of parts, board, enclosure to VRML for a bidirectional use back in kicad +
+3. ability to load directly the .kicad_mod footprint in FreeCAD to easy align the mechanical model to kicad footprint +
+4. ability to load directly the .kicad_pcb board and parts in FreeCAD +
+5. 'bounding boxes', 'minimum volume', 'minimum heigh', 'drill size', 'blacklist' and 'virtual' options to tailor your MCAD exporting +
+6. interference and collisions detect for enclosure and footprint design +
+7. exporting of VRML models with Material Properties for best result in 3D rendering/raytracing +
+8. ability to create simple models in MCAD using boxes or cylinders with dimensions as in scale values of wrl models +
+link:https://forum.kicad.info/t/generic-3d-shapes-in-library/2555/10[create boxes or cylinders using dimensions as in scale values of wrl model]
+*requirements:* +
+- kicad stable >= 4.0 or development release +
+- FreeCAD stable >= 0.15 or development release +
+- a library of STEP (or IGES) 3D models +
+*tips:* +
+- never use a scale different from 1:1:1 in your 3D models +
+- configure your [prefix3D] in ksu-config.ini to your KISYS3DMOD path +
+- use STEP or IGES or VRML or *mixed type of models* in your board +
+*Latest Enhancements:* +
+- *STEP multi-part* allowed (managing union or compound) +
+- *EdgeCuts allowed for footprint* that will generate Cuts in Board +
+- *Pcb Edge as footprint* allowed +
+- *edge tolerance on vertex coincidence* for easier designing +
+- utf8 characters allowed for path and model names +
+- turntable section +
+- better theme integration in FreeCAD +
+**********************************************************************
+<<<
+
+OverView
+--------
+**********************************************************************
+to run the demo:
+
+in Linux:
+change dir to the folder in which you have extracted the demo +
++./launch-kicad_StepUp-Tools-demo.sh+
+
+in windows:
+change dir to the folder in which you have extracted the demo +
++launch-kicad_StepUp-Tools-demo.bat+
+
+in OSX:
+change dir to the folder in which you have extracted the demo +
++./launch-kicad_StepUp-Tools-OSX-demo.sh+
+
+the demo comes with a kicad project, along with all needed STEP and wrl modules, just to be used just out of the box +
+(*NB* use the script from inside the dir) +
+to see the kicad board, change dir to the folder in which you have extracted the demo +
+*in windows:* +
+ +launch-kicad-demo-project.bat+ +
+*in linux:* +
+ +./launch-kicad-demo-project.sh+ +
+ *in OSX:* +
+ +./launch-kicad-demo-project-OSX.sh+ +
+ + 
+
+for some ready to go libraries please refer to:
+https://github.com/easyw/kicad-3d-mcad-models4
+and other useful libs in up this thread 
+**********************************************************************
+
+kicad StepUp tools GUI
+----------------------
+
+.kicad StepUp tools GUI Overview
+image::images/ksu-tools-overview.png[]
+
+<<<
+
+
+Introduction
+------------
+kicad StepUp is a 3D mechanical exporter for kicad board and assemblies +
+It will improve a collaborative exchange between KiCad and FreeCAD/MCAD +
+With *kicad StepUp* script, it is possible to work in kicad EDA with the same component model data
+available in the *STEP AP214 3D format*, and obtain a 3D STEP AP214 model of the pcb board and
+a complete board assemblies with electronic modules, to be used for *MCAD interchange*. +
+The accurate 3D visualization of components on board assemblies in kicad 3dviewer, can then be
+maintained in the same accuracy and aspect in STEP AP214 format, just generating VRML models
+from STEP or FreeCAD mechanical models and exporting the board through kicad StepUp script. +
+The *kicad StepUp* script maintains the usual way to work with kicad, but improves the process
+to work in a collaborative way with mechanical designers bringing near ECAD and MCAD environments. +
+
+Kicad StepUp allows the user to modeling the 3D modules starting from FreeCAD
+(instead of using Wings3D), creating models in STEP AP214 and rendering the
+pcb board and components in native STEP AP214. +
+*Note:* *kicad StepUp* 3D MCAD exporter is compatible with: +
+      *STEP* with colors files (_.step_, _.stp_ extensions) +
+      *IGES* with colors files (_.iges_, _.igs_ extensions) +
+
+Designing in kicad native 3d-viewer will produce a fully aligned STEP version
+with the same view of kicad 3d render. +
+Now the two words have the same accurate 3D visualization; it is possible to design in kicad EDA and transfer the artwork to MCAD (FreeCAD) smoothly
+
+*WYSIWYG from EDA to MCAD*
+
+<<<
+
+WYSIWYG from EDA to MCAD
+------------------------
+
+.kicad StepUp in Kicad 3d-viewer
+image::images/hackrf-one-stepup-kicad-3d-viewer.png[]
+
+.kicad StepUp in MCAD Catia
+image::images/hackrf-one-stepup-catia-assembly.png[]
+
+Basic How To '(using kicad StepUp the easiest way)'
+---------------------------------------------------
+
+*(not changing the way you use kicad)*
+
+*1.* just copy the STEP 3d models in the same folder in which there are your wrl 3d models and
+   use the same name of the wrl model name (e.g. r_0603.wrl => r_0603.step) +
+*2.* open in FreeCAD the Macro kicad-StepUp-tools.FCMacro and
+   edit the config file ksu-config.ini (wich is autogenerate at first running of the macro) with e.g. notepad changing your model prefix to your KISYS3DMOD path +
+*3.* clik on the button to open your kicad pcbnew board file +
+*4.* watch the script assembling your 3D board with 3D models :) +
+you can also add the macro button to the FreeCAD toolbar following these instructions: +
+ *Note:* link:http://www.freecadweb.org/wiki/index.php?title=Customize_ToolsBar[FreeCAD forum Customize Toolbar] how to add a button to Toolbar in FreeCAD
+ adding also the kicad StepUp icon +
+*5.* the Macro can be executed as a script
+    <path to Freecad executable file>/freecad <path to the Macro file>/kicad-StepUp-tools.FCMacro <name_of_board_without_extension> +
+    '(e.g. freecad kicad-StepUp-tools.FCMacro myboard)' +
+*just watch the Macro assembling your 3D board with 3D models :)* +
+*6.* the kicad StepUp can be also a Mod WorkBench for FreeCAD: +
+copy the folder kicadStepUpMod in the right folder for your OS +
+link:http://www.freecadweb.org/wiki/index.php?title=Installing_more_workbenches[FreeCAD Installing workbenches]
+
+How To '(using kicad StepUp the best way)'
+------------------------------------------
+
+*(getting the best from STEP models)*
+
+*1.* just copy the STEP 3d models in the same folder in which there are your wrl 3d models +
+*2.* export the STEP models, scaled 1/2.54 to wrl with the same name of the STEP model
+(e.g. r_0603.wrl => r_0603.step); in this way your 3D board in kicad pcbnew 3d-viewer and in FreeCAD workbench will look perfectly aligned +
+*3.* open in FreeCAD the Macro kicad-StepUp-tools.FCMacro and
+   edit the config file ksu-config.ini (wich is autogenerate at first running of the macro) with e.g. notepad changing your model prefix to your KISYS3DMOD path +
+*4.* clik on the button to open your kicad pcbnew board file +
+*5.* watch the script assembling your 3D board with 3D models :) +
+you can also add the macro button to the FreeCAD toolbar following these instructions: +
+ *Note:* link:http://www.freecadweb.org/wiki/index.php?title=Customize_ToolsBar[FreeCAD forum Customize Toolbar] how to add a button to Toolbar in FreeCAD
+ adding also the kicad StepUp icon +
+*6.* the Macro can be executed as a script
+    <path to Freecad executable file>/freecad <path to the Macro file>/kicad-StepUp-tools.FCMacro <name_of_board_without_extension> +
+    '(e.g. freecad kicad-StepUp-tools.FCMacro myboard)' +
+*just watch the Macro assembling your 3D board with 3D models :)*
+*7.* the kicad StepUp can be also a Mod WorkBench for FreeCAD: +
+copy the folder kicadStepUpMod in the right folder for your OS +
+link:http://www.freecadweb.org/wiki/index.php?title=Installing_more_workbenches[FreeCAD Installing workbenches]
+
+<<<
+kicad StepUp workflow
+---------------------
+
+.kicad StepUp WorkFlow
+image::images/ksu-workflow.png[]
+
+
+Create your own Library
+----------------------
+
+The way to build a STEP models library to be easily used by the script is:
+
+1. *Load the kicad footprint* inside FreeCAD using kicad StepUp tools
+2. use the footprint as a reference for your model position
+3. start modeling your 3d object in scale 1:1 in mm
+(which is the way in which mechanical stuff are used to be) +
+4. export STEP and VRML of your model just clicking on the "Export STEP & VRML" button +
+5. assure that your STEP module *is fused to just one solid object* +
+(_Part Boolean Union in FreeCAD_ or _Part Makecompound in FreeCAD_) +
+*Note:* here link:http://forum.freecadweb.org/viewtopic.php?t=8451#p69489[FreeCAD forum fusion howto] some tips to fuse correctly objects in FreeCAD +
+6. use the same name to wrl and STEP model +
+7. put the STEP model and VRML model in the same place +
+8. check if your vrml model is aligned to the kicad pcb footprint in pcbnew 3d-viewer +
+*all the conversion steps* can be done with the use of *'kicad-SteUp-tools.FCMacro'* +
+It is possible to *Load the kicad footprint* inside FreeCAD to _interactively align 3d model
+to the footprint_ in a live visual feedback +
+*Note:* *kicad StepUp* 3D MCAD exporter is compatible with: +
+      *STEP* with colors files (_.step_, _.stp_ extensions) +
+      *IGES* with colors files (_.iges_, _.igs_ extensions) +
+
+Using kicad pre-built libraries: +
+some ready-to-go 3D libraries are ready at +
+link:https://github.com/easyw/kicad-3d-mcad-models[kicad 3D MCAD VRML libraries] +
+and you can get more info at the forum +
+link:https://forum.kicad.info/t/3d-new-library-for-mechanical-cad-exporting-and-enclosure-design/1763[kicad info forum 3D MCAD libs] +
+link:https://forum.kicad.info/search?q=mcad[kicad info MCAD related arguments] +
+
+<<< 
+
+Interactively align 3D part to kicad footprint
+----------------------------------------------
+With *'kicad-SteUp-tools Macro'* it is possible to *Load the kicad footprint* in FreeCAD +
+and align the 3D part with a visual real time feedback of the 3d model and footprint reciprocal position. +
+Once the 3D part is aligned to the footprint pads and silk, the model can be exported
+in STEP format and in VRML format for kicad 3d-rendering, just clicking on the *Export STEP & VRML* button. +
+*That will align EDA to MCAD 3d viewers*. No need to reiterate the aligning process or empiric calculate
+offset and rotation to apply to VRML model. +
+You can also click on *'Create axis'* button to have an other help in the part orienting process +
+
+TIP: Tip. +
+footprint aligner workflow: +
+- load the Macro +
+- open the 3d STEP model in FC +
+- Load the footprint with the macro Button +
+ +
+or +
+ +
+- Load the footprint with the macro Button +
+- import the 3d model in FC +
+  (*NB Import Ctrl+I*, 'not Open Ctrl+O')
+
+
+TIP: Tip. +
+use the *'kicad-SteUp-tools.FCMacro'* to easily align the 3D model to the footprint
+(then it will be aligned to the footprint also in kicad) +
+(previously known as **'move-rotate-scale macro'**) +
+the macro can be launched with: +
+ +./launch-kicad_StepUp-Tools.sh+ +
+ or with +
+ +launch-kicad_StepUp-Tools.bat+ +
+ or just open the macro in FreeCAD and run it +
+ or add the macro button to the FreeCAD toolbar following these instructions: +
+ *Note:* link:http://www.freecadweb.org/wiki/index.php?title=Customize_ToolsBar[FreeCAD forum Customize Toolbar] how to add a button to Toolbar in FreeCAD
+ adding also the kicad StepUp icon +
+
+<<<
+
+*Note:* +
+the macro takes care of 2D footprint rotation of kicad for the footprint alignment +
+it does take care of vrml model 'z' rotation, it doesn't take care of 'x' and 'y' 3d model rotation +
+it doesn't take care of 'x', 'y', 'z' 3d model translation +
+
+this behaviour is intentional... you have to align your 3d STEP model of Freecad to your 2D footprint of kicad, +
+then if you export your step model to vrml (scaling 1/2.54) the vrml model will be aligned too +
+
+one has to check/modify, if needed, the part of 3D vrml model in kicad as following +
+
+`(model path/name.wrl` +
+`(at (xyz 0 0 0))` +
+`(scale (xyz 1 1 1))` +
+`(rotate (xyz 0 0 0))` +
+
+`at (xyz 0 0 0)` is mandatory, as much as `scale (1 1 1)` +
+`rotate (xyz 0 0 z_value)` can have a z rotation value +
+(those fields can be changed on the .kicad_mod text file or through the kicad GUI) +
+ +
+*rotation values and position translations are taken in care ONLY by the StepUp assembler 
+when loading a board and models*
+
+.kicad StepUp icon
+image::images/kicad-StepUp-icon.png[]
+
+.kicad pcbnew: Load Footprint
+image::images/load-footprint-kicad.png[]
+
+.kicad StepUp tools: Load Footprint
+image::images/load-footprint.png[]
+
+.kicad StepUp tools: Align 3D model to footprint
+image::images/align-3d-model-to-footprint.png[]
+
+.kicad StepUp tools: 3D STEP model aligned
+image::images/3D-STEP-aligned-to-footprint.png[]
+
+.kicad StepUp tools: 3D VRML model aligned
+image::images/3D-VRML-aligned-to-footprint.png[]
+
+<<<
+
+.kicad StepUp tools: align 3D STEP and VRML to footprint      - video tutorial
+image::images/align-3D-STEP-to-footprint.png[]
+link:https://youtu.be/O6vr8QFnYGw[YouTube Kicad StepUp tool: Align 3D Step model to pcbnew footprint video]
+
+<<<
+
+Generating smaller 3D model with bounding boxes
+------------------------------------------------
+
+Sometimes the need would be just a 3D MCAD model for analysis or simple space constraints,
+so a nice detailed component models in MCAD system may be not required or desired; +
+in that case it is possible to configure the exporter to: +
+
+- skip 3D models by name +
+- skip models with a volume less than an assigned value +
+- skip models with a height less than an assigned value +
+- convert the remaining parts, or all but edge connectors, to bounding boxes +
+
+The result 3D MCAD model will have the accuracy of the pcb and assemblies only when needed,
+maintaining the model light as required. +
+
+The config file  _ksu-config.cfg_ let you configure the following parameters:
+
+1. 3D path prefix +
+   your KISYS3DMOD path (see kicad for help) or 3D model path prefix +
+   ${KIPRJMOD}, ${KIPRJMOD}, :ALIAS:, ${ENV} vars are supported
+2. blacklist of 3D models +
+   none=all 3D models will be parsed; +
+   volume=1 means all models with a volume < 1mm3 will not be included +
+   height=1 means all models with a height < 1mm  will not be included
+3. pcb color r,g,b +
+   e.g. 0.0,0.5,0.0,light green
+4. bounding box option +
+   LIST list of modules, separated by a comma, not converted to bbox +
+   ALL or off
+5. placement options of board and parts +
+   useAuxOrigin, useBaseOrigin, useBasePoint;x;y, usedefault, +AutoAdjust
+6. virtual modules to be or not added to board +
+   if a module has vitual attribute in kicad pcbnew, can be selectively parsed
+7. fuse modules to board and make a single object of pcb and parts +
+   fuseAll, nofuse +
+   Note: be careful ... fusion can be heavy or generate FC crash with a lot of objects +
+   please consider to use bbox or blacklist small objs in case of 'fuseAll' option
+8. allow compound for STEP models +
+   allow compound if you want to allow multi-part STEP models
+9. turntable spin after loading +
+   enable or disable spinning after loading the board
+10. font size for ksu widget
+
+Skipping small parts and using Bounding Boxes
+---------------------------------------------
+
+.kicad StepUp: using bounding boxes for all but connectors and skipping small parts
+image::images/hackrf-one-stepup-bboxes.png[]
+
+<<<
+
+Check for Collisions and mechanical constrains
+----------------------------------------------
+With *'kicad-SteUp-tools Macro'* it is also possible to *detect collisions* +
+and *check mechanical constrains* +
+- detect collisions among part pins and drills +
+- detect collisions for enclosure clearance +
+  (between pcb with connectors and enclosure) +
+
+.kicad StepUp tools: collisions check for 3D part module and footprint
+image::images/collision-check-footprint.png[]
+
+.kicad StepUp tools: collisions found for 3D part module and footprint
+image::images/collision-found-footprint.png[]
+
+<<<
+
+.kicad StepUp tools: collisions check for 3D pcb and connectors with Arduino-uno-enclosure
+image::images/collision-check-arduino-uno-enclosure.png[]
+
+.kicad StepUp tools: collisions found for 3D pcb and connectors with Arduino-uno-enclosure
+image::images/collision-found-arduino-uno-enclosure.png[]
+
+<<<
+
+STEP AP214 and VRML FreeCAD scripted repository ready to kicad StepUp
+---------------------------------------------------------------------
+link:https://github.com/easyw/kicad-3d-models-in-freecad[repository of 3D STEP models:] +
+me and HyOzd have done a repository of many electronic components *STEP AP214* and *VRML* models,
+with some nice scripts to build parametric models for +
+'SOIC, SSOP, TSSOP, SOT, QFP, QFN' ICs, 'DIP' ICs, 'Chip Resistors, Chip Capacitors, Pin Headers' +
+just compiling a parametric text file with dimensions from component data sheet +
+link:https://github.com/easyw/kicad-3d-models-in-freecad/tree/master/cadquery/FCAD_script_generator[3D-script-generator and 3D models] +
+'more is coming ...'
+
+.kicad StepUp: parametric STEP & VRML library
+image::images/parametric-aluminum-capacitors.png[]
+.kicad StepUp: parametric STEP & VRML library
+image::images/parametric-tantalum-capacitors.png[]
+.kicad StepUp: parametric STEP & VRML library
+image::images/parametric-chip-capacitors.png[]
+.kicad StepUp: parametric STEP & VRML library
+image::images/parametric-chip-resistors.png[]
+.kicad StepUp: parametric STEP & VRML library
+image::images/parametric-qfn-chips.png[]
+.kicad StepUp: parametric STEP & VRML library
+image::images/parametric-qfp-chips.png[]
+.kicad StepUp: parametric STEP & VRML library
+image::images/parametric-soic-chips.png[]
+.kicad StepUp: parametric STEP & VRML library
+image::images/parametric-sot-chips.png[]
+
+<<<
+
+Create boxes or cylinders using dimensions as in scale values of wrl model
+--------------------------------------------------------------------------
+
+
+This feature will be triggered only if the wrl models have the following names: + 
+
+** box_mcad.wrl
+** cylV_mcad.wrl
+** cylH_mcad.wrl
+
+When kicad StepUp tools will parse these special names, correspondent models will be generated in FreeCAD using the dimensions as per the scale values indicated in the kicad_pcb file.
+the *3 special wrl models are in the "shapes" folder of the demo project* +
+
+So it is possible to use simple generic shapes to generate bounding box like ECAD and MCAD models...
+
+<<<
+
+Blender compatibility for FreeCAD generated VRML files
+------------------------------------------------------
+
+link:https://youtu.be/oq-w532Qmlo[kicad StepUp rendered with Blender]
+
+.kicad StepUp: video rendered with Blender
+image::images/kicad-StepUp-rendered-with-Blender.png[]
+
+kicad-SteUp-tools.FCMacro now have an exporting function that will create
+VRML smaller in file size and **fully compatible with Kicad and Blender** 
+
+<<<
+
+Config File
+-----------
+**NB the new config file is in home user dir** +
+ +
+Linux and OSX: +
+   '~/' which is '$HOME' +
+Windows: +
+   '%HOMEPATH%' +
+Click kicad-StepUp-tools.FCMacro Config Button to display the **ksu-config.ini** file +
+and Help button for a quick Help +
+
+In case of any problem, just *delete ksu-config.ini file* and restart the kicad StepUp tools... a new ini file will be generated +
+edit your 3D prefix and re-run the tools  
+
+<<<
+
+List of files
+-------------
+
+kicad_StepUp-Tools.FCMacro = Load kicad Board, Load Footprint, Move, Rotate, Scale, export wrl, check Collisions;
+GUI Macro to easily manage ALL MCAD conversion for board and manufacturers STEP modules and kicad VRML +
+kicadStepUp-starter-Guide.pdf = 'kicad StepUp' starter Guide
+kicad_StepUp.FCMacro = OLD 'kicad StepUp' 3D MCAD exporter script/plugin +
+ksu-config.cfg = OLD configuration file +
+kicad_StepUp_vrml_export.FCMacro = OLD STEP to scaled VRML script +
+
+<<< 
+credits
+-------
+
+'kicad StepUp' script author is {author} link:https://launchpad.net/~easyw/[easyw@launchpad] +
+Guide Doc Version is {revision}
+
+link:http://kicad-pcb.org/[kicad EDA] +
+- IDF export for kicad (Cirilo Bernardo)
+
+link:http://freecadweb.org/[FreeCAD]
+
+IDF import for FreeCAD +
+- Milos Koutny (milos.koutny@gmail.com)
+
+link:https://github.com/jmwright/cadquery-freecad-module/archive/master.zip/[CadQuery module] +
+- CadQuery FreeCAD module +
+
+link:https://bitbucket.org/hyOzd/freecad-macros[hyOzd freecad macros] +
+- hyOzd parametric script
+
+FreeCAD-PCB +
+- marmni <marmni@onet.eu>
+
+<<<
+
+[[copyright]]
+*Copyright*
+-----------
+
+This document '{docname}' and kicad StepUp scripts are Copyright © 2015 2016 2017 by {Author}.
+Kicad STEPUP (TM) is a TradeMark and cannot be freely useable. +
+This program is free software; you can redistribute it and/or modify it
+under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation to ensure cooperation with the community
+in the case of network server software; for detail see the LICENCE text file. +
+http://www.gnu.org/licenses/agpl-3.0.en.html +
+Moreover you have to include the original author copyright. +
+
+All trademarks within this guide belong to their legitimate owners.
+
+Risk disclaimer
+---------------
+
+*USE 3D CAD DATA AT YOUR OWN RISK +
+DO NOT RELY UPON ANY INFORMATION FOUND HERE WITHOUT INDEPENDENT VERIFICATION.*

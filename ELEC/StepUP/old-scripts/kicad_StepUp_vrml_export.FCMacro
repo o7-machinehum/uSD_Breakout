@@ -1,0 +1,106 @@
+# -*- coding: utf8 -*-
+# -*- coding: utf8 -*-
+#****************************************************************************
+#*                                                                          *
+#*   Kicad STEPUP (3D kicad board and models to STEP) for FreeCAD           *
+#*   Vrml 3D exporter from Step to be used in kicad pcb board                                                *
+#*   Copyright (c) 2013, 2014, 2015                                         *
+#*   Maurice easyw@katamail.com                                             *
+#*                                                                          *
+#*   code partially based on:                                               *
+#*      Printed Circuit Board Workbench for FreeCAD  FreeCAD-PCB            *
+#*      Copyright (c) 2013, 2014, 2015                                      *
+#*      marmni <marmni@onet.eu>                                             *
+#*                                                                          *
+#*      and IDF import for FreeCAD                                          *
+#*      (c) Milos Koutny (milos.koutny@gmail.com) 2012                      *
+#*                                                                          *
+#*                                                                          *
+#*   This program is free software; you can redistribute it and/or modify   *
+#*   it under the terms of the GNU Lesser General Public License (LGPL)     *
+#*   as published by the Free Software Foundation; either version 2 of      *
+#*   the License, or (at your option) any later version.                    *
+#*   for detail see the LICENCE text file.                                  *
+#*   Moreover you have to include the original author copyright             *
+#*   kicad StepUP made by Maurice easyw@katamail.com                        *
+#*                                                                          *
+#*   This program is distributed in the hope that it will be useful,        *
+#*   but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+#*   GNU Library General Public License for more details.                   *
+#*                                                                          *
+#*   You should have received a copy of the GNU Library General Public      *
+#*   License along with this program; if not, write to the Free Software    *
+#*   Foundation, Inc.,                                                      *
+#*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA           *
+#*                                                                          *
+#****************************************************************************
+
+# ver 0.3 01/07/2015
+ 
+__title__ = "kicad_StepUp"
+__author__ = "maurice"
+
+import FreeCAD, FreeCADGui, Draft
+import Idf
+import ImportGui
+
+import re
+import sys, os , argparse
+import __builtin__
+
+# filePath = os.path.dirname(os.path.abspath(__file__))
+filePath = os.path.dirname(os.path.abspath(__file__))
+FreeCAD.Console.PrintMessage(filePath+"\n")
+
+#filePath = 'C:/Cad/Progetti_K/demo/eth-32gpio.kicad_pcb'
+# filePath=filePath.replace("\\\\", "/")
+fileName=sys.argv[1][:-4]
+fullfilePath = filePath+os.sep+sys.argv[1][:-4]+'.wrl'
+
+
+Gui.activateWorkbench("PartWorkbench")
+Gui.SendMsgToActiveView("ViewFit")
+Gui.activeDocument().activeView().viewTop()
+
+selection = Gui.Selection.getSelection()
+bb=App.ActiveDocument.ActiveObject.Shape.BoundBox
+
+#sF=(0.03937)
+#bbX=(bb.XLength())*0.03937
+#bbY=(bb.YLength())*0.03937
+#bbZ=(bb.ZLength())*0.03937
+
+Draft.scale(App.ActiveDocument.ActiveObject,delta=App.Vector(0.3937,0.3937,0.3937),center=App.Vector(0,0,0),legacy=True)
+App.ActiveDocument.recompute()
+selection = Gui.Selection.getSelection()
+if len(selection) == 1:
+	myobject = selection[0]
+	if (Gui.ActiveDocument.getObject(myobject.Name).BoundingBox == True):
+		Gui.ActiveDocument.getObject(myobject.Name).BoundingBox = False
+	else:
+		Gui.ActiveDocument.getObject(myobject.Name).BoundingBox = True
+
+Gui.SendMsgToActiveView("ViewFit")
+
+FreeCAD.Console.PrintMessage(filePath+os.sep+sys.argv[1][:-5]+'.wrl'+'\n')
+## exporting
+__objs__=[]
+doc = FreeCAD.ActiveDocument
+for obj in doc.Objects:
+   # do what you want to automate
+   Gui.Selection.addSelection(obj)
+   App.ActiveDocument.ActiveObject.ViewObject.DisplayMode = 1 #Shaded
+   __objs__.append(obj)
+
+   
+#ImportGui.export(__objs__,filePath+os.sep+sys.argv[1][:-5]+'.wrl')
+#FreeCADGui.export(__objs__,u"C:/Cad/Progetti_K/demo/t.wrl")
+
+# __objs__=[]
+# __objs__.append(FreeCAD.getDocument("Unnamed").getObject("Part__Feature"))
+FreeCADGui.export(__objs__,filePath+os.sep+sys.argv[1][:-5]+'.wrl')
+
+del __objs__
+
+

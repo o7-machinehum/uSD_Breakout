@@ -1,0 +1,18 @@
+=== Kicad EDA to MCAD exporting
+With *kicad StepUp* script, it is possible to work in kicad EDA with the same component model data
+available in the *STEP AP214 3D format*, and obtain a 3D STEP AP214 model of the pcb board and
+a complete board assemblies with electronic modules, to be used for *MCAD interchange*. +
+The accurate 3D visualization of components on board assemblies in kicad 3dviewer, can then be
+maintained in the same accuracy and aspect in STEP AP214 format, just generating VRML models
+from STEP or FreeCAD mechanical models and exporting the board through kicad StepUp script. +
+The *kicad StepUp* script maintains the usual way to work with kicad, but improves the process
+to work in a collaborative way with mechanical designers bringing near ECAD and MCAD environments.
+
+<<<
+
+.Kicad 3dviewer with VRML models (coming from STEP models)
+image::images/hackrf-one-stepup-kicad-3d-viewer.png[]
+
+=== Kicad assemblies in MCAD
+.MCAD board assembles in STEP AP214 (exported with kicad StepUp)
+image::images/hackrf-one-stepup-catia-assembly.png[]

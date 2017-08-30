@@ -1,0 +1,67 @@
+import FreeCAD, FreeCADGui, Draft
+import ImportGui
+import sys, os , argparse
+
+
+Gui.activateWorkbench("PartWorkbench")
+Gui.SendMsgToActiveView("ViewFit")
+Gui.activeDocument().activeView().viewTop()
+
+filePath = os.path.dirname(os.path.abspath(__file__))
+doc_name = FreeCAD.ActiveDocument.Label
+docFilePath = FreeCAD.ActiveDocument.FileName
+
+__objs__=[]
+doc = FreeCAD.ActiveDocument
+for obj in doc.Objects:
+   # do what you want to automate
+   Gui.Selection.addSelection(obj)
+   #App.ActiveDocument.ActiveObject.ViewObject.DisplayMode = 1 #Shaded
+   __objs__.append(obj)
+
+selection = Gui.Selection.getSelection()
+#bb=App.ActiveDocument.ActiveObject.Shape.BoundBox
+
+#sF=(0.03937)
+#bbX=(bb.XLength())*0.03937
+#bbY=(bb.YLength())*0.03937
+#bbZ=(bb.ZLength())*0.03937
+
+#Draft.scale(App.ActiveDocument.ActiveObject,delta=App.Vector(0.3937,0.3937,0.3937),center=App.Vector(0,0,0),legacy=True)
+Draft.scale(__objs__,delta=App.Vector(0.3937,0.3937,0.3937),center=App.Vector(0,0,0),legacy=True)
+
+App.ActiveDocument.recompute()
+selection = Gui.Selection.getSelection()
+#if len(selection) == 1:
+#	myobject = selection[0]
+#	if (Gui.ActiveDocument.getObject(myobject.Name).BoundingBox == True):
+#		Gui.ActiveDocument.getObject(myobject.Name).BoundingBox = False
+#	else:
+#		Gui.ActiveDocument.getObject(myobject.Name).BoundingBox = True
+
+Gui.SendMsgToActiveView("ViewFit")
+
+#FreeCAD.Console.PrintMessage(filePath+os.sep+sys.argv[1][:-5]+'.wrl'+'\n')
+## exporting
+__objs__=[]
+doc = FreeCAD.ActiveDocument
+for obj in doc.Objects:
+   # do what you want to automate
+   Gui.Selection.addSelection(obj)
+   obj.ViewObject.DisplayMode = 1 #Shaded
+   __objs__.append(obj)
+
+   
+#ImportGui.export(__objs__,filePath+os.sep+sys.argv[1][:-5]+'.wrl')
+#FreeCADGui.export(__objs__,u"C:/Cad/Progetti_K/demo/t.wrl")
+
+
+# __objs__=[]
+# __objs__.append(FreeCAD.getDocument("Unnamed").getObject("Part__Feature"))
+#FreeCADGui.export(__objs__,filePath+os.sep+doc_name+'.wrl')
+#FreeCAD.Console.PrintMessage(filePath+os.sep+doc_name+'.wrl'+'\n')
+
+FreeCAD.Console.PrintMessage(docFilePath[:-6]+'.wrl'+'\n')
+FreeCADGui.export(__objs__,docFilePath[:-6]+'.wrl')
+
+del __objs__
