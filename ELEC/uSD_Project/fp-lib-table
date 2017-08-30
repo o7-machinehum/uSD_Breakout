@@ -1,0 +1,15 @@
+(fp_lib_table
+  (lib (name Pin_Headers)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Pin_Headers.pretty)(options "")(descr ""))
+  (lib (name Houseings_QFP)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Housings_QFP.pretty)(options "")(descr ""))
+  (lib (name Houseings_QFP_Walker)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Housings_QFP_Walker.pretty)(options "")(descr ""))
+  (lib (name Inductors)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Inductors.pretty)(options "")(descr ""))
+  (lib (name Capacitors_SMD)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Capacitors_SMD.pretty)(options "")(descr ""))
+  (lib (name Resistors_SMD)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Resistors_SMD.pretty)(options "")(descr ""))
+  (lib (name Connectors_Terminal_Blocks.pretty)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Connectors_Terminal_Blocks.pretty)(options "")(descr ""))
+  (lib (name Connectors_Barrel.pretty)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Connectors_Barrel.pretty)(options "")(descr ""))
+	(lib (name Via)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/via.pretty)(options "")(descr ""))
+	(lib (name Connectors_Battery)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Connectors_Battery.pretty)(options "")(descr ""))
+	(lib (name Housings_SOIC.pretty)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Housings_SOIC.pretty)(options "")(descr ""))
+	(lib (name Housings_SSOP.pretty)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Housings_SSOP.pretty)(options "")(descr ""))
+
+)

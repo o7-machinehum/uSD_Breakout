@@ -10,4 +10,10 @@ Additional Components
 | SN74HC165PWR  | 296-8253-1-ND              | Parallel or Serial to Serial Shift register |
 | RTL8710       | N/A                        | Wifi module w/ ARM Cortex M3                |
 
+
+Notes
+-----
+-PCB thickness - 0.6mm
+
+
 Walker (Machinehum)
