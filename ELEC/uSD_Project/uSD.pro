@@ -1,6 +1,6 @@
-update=Thu 01 Jun 2017 09:04:53 PM PDT
+update=Tue 05 Sep 2017 06:47:31 PM PDT
 version=1
-last_client=cvpcb
+last_client=kicad
 [pcbnew]
 version=1
 LastNetListRead=
@@ -40,9 +40,20 @@ LibName4=power
 LibName5=PMIC
 LibName6=linear
 LibName7=74xx
+LibName8=modules
 
 [cvpcb]
 version=1
 NetIExt=net
 [cvpcb/libraries]
 EquName1=devcms
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=Plots/
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=Pcbnew
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60

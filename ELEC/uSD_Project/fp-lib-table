@@ -12,5 +12,6 @@
 	(lib (name Housings_SOIC.pretty)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Housings_SOIC.pretty)(options "")(descr ""))
 	(lib (name Housings_SSOP.pretty)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Housings_SSOP.pretty)(options "")(descr ""))
 	(lib (name Arranged_Pads.pretty)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/Arranged_Pads.pretty)(options "")(descr ""))
+	(lib (name modules)(type KiCad)(uri ${KIPRJMOD}/../Libraries/lib_fp/modules.pretty)(options "")(descr ""))
 
 )
