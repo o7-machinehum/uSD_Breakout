@@ -41,6 +41,7 @@ LibName5=PMIC
 LibName6=linear
 LibName7=74xx
 LibName8=modules
+LibName9=microchip
 
 [cvpcb]
 version=1
