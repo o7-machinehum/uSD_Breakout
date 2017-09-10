@@ -32,7 +32,7 @@ F 1 "CONN_01X08" V 2900 1850 50  0000 C CNN
 F 2 "Pin_Headers:Pin_Header_Straight_1x08_Pitch2.54mm" H 2800 1850 50  0001 C CNN
 F 3 "" H 2800 1850 50  0001 C CNN
 	1    2800 1850
-	-1   0    0    -1  
+	-1   0    0    1   
 $EndComp
 Wire Wire Line
 	3000 1500 4100 1500
@@ -165,7 +165,7 @@ F 1 "CONN_01X08" V 4400 1850 50  0000 C CNN
 F 2 "Arranged_Pads.pretty:uSD" H 4300 1850 50  0001 C CNN
 F 3 "" H 4300 1850 50  0001 C CNN
 	1    4300 1850
-	1    0    0    1   
+	1    0    0    -1  
 $EndComp
 Text Label 7100 4000 0    60   ~ 0
 DO
@@ -607,7 +607,7 @@ F 1 "CONN_02X05" H 6650 3900 50  0000 C CNN
 F 2 "Pin_Headers:Pin_Header_Straight_2x05_Pitch1.27mm" H 6650 3000 50  0001 C CNN
 F 3 "" H 6650 3000 50  0001 C CNN
 	1    6650 4200
-	-1   0    0    -1  
+	-1   0    0    1   
 $EndComp
 $Comp
 L VDD #PWR011
