@@ -2,7 +2,9 @@ uSD Breakout
 =========
 Micro SD (uSD) Breakout is a device to be inserted into a micro SD card slot to breakout the pins. This project is designed for the pinebook. But theoretically can be used for any uSD card slot.
 
+![alt text](https://github.com/Machine-Hum/uSD_Breakout/blob/master/Media/Pluggy.gif "Boards")
 ![alt text](https://github.com/Machine-Hum/uSD_Breakout/blob/master/ELEC/uSD_Project/Plots/Screenshot%20from%202017-09-08%2018-38-04.png?raw=true "PCB Layout")
+![alt text](https://github.com/Machine-Hum/uSD_Breakout/blob/master/Media/boards.JPG "Boards")
 
 Additional Components
 ----------------
